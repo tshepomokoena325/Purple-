@@ -63,14 +63,14 @@ const features = [
 
 export const FeaturesGrid: React.FC = () => {
   return (
-    <section className="py-24 px-6 bg-muted/30 relative" id="features">
+    <section className="py-24 px-6 bg-[#0E0E14] relative" id="features">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-20">
-          <h2 className="text-4xl md:text-5xl font-heading mb-6 tracking-tight">
-            Everything You Need To <span className="text-primary">Dominate</span> Your local Market
+        <div className="text-center mb-20 text-white">
+          <h2 className="text-4xl md:text-5xl font-heading mb-6 tracking-tight italic font-black">
+            Everything You Need To <span className="text-primary italic">Dominate</span> Your Market
           </h2>
-          <p className="text-muted-foreground text-xl max-w-3xl mx-auto">
-            We've built the ultimate toolset for South African service businesses to automate growth and reclaim their time.
+          <p className="text-slate-400 text-xl max-w-3xl mx-auto font-medium">
+            We've built the ultimate toolset for service businesses to automate growth and reclaim their time.
           </p>
         </div>
 
@@ -84,12 +84,12 @@ export const FeaturesGrid: React.FC = () => {
               transition={{ delay: idx * 0.05 }}
               className="group"
             >
-              <div className="h-full p-8 rounded-3xl bg-background border border-border/50 transition-all duration-300 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5">
-                <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300">
-                  <feature.icon className="w-6 h-6" />
+              <div className="h-full p-8 rounded-[2.5rem] bg-[#16161E] border border-white/5 transition-all duration-300 hover:border-primary/30 hover:shadow-2xl hover:shadow-primary/5 hover:-translate-y-1">
+                <div className="w-14 h-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-all duration-500 shadow-inner">
+                  <feature.icon className="w-7 h-7" />
                 </div>
-                <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">
+                <h3 className="text-xl font-bold mb-3 text-white">{feature.title}</h3>
+                <p className="text-slate-400 leading-relaxed font-medium">
                   {feature.description}
                 </p>
               </div>

@@ -75,14 +75,14 @@ interface PricingSectionProps {
 
 export const PricingSection: React.FC<PricingSectionProps> = ({ onStart }) => {
   return (
-    <section className="py-24 px-6 relative" id="pricing">
+    <section className="py-24 px-6 relative bg-[#0B0B0F]" id="pricing">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <Badge className="mb-4 px-4 py-1 bg-primary/10 text-primary border-primary/20 hover:bg-primary/20 transition-colors">
             Pricing Plans
           </Badge>
-          <h2 className="text-4xl md:text-5xl font-heading mb-4">Simple, Transparent Pricing</h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <h2 className="text-4xl md:text-5xl font-heading mb-4 text-white font-black italic">Simple, Transparent Pricing</h2>
+          <p className="text-slate-400 text-lg max-w-2xl mx-auto font-medium">
             Choose the plan that fits your business stage. All plans include a 14-day free trial.
           </p>
         </div>
@@ -99,11 +99,11 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onStart }) => {
               className="h-full"
             >
               <Card className={cn(
-                "relative h-full flex flex-col border-border/50 transition-all duration-300 hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)] hover:border-primary/30 overflow-hidden bg-white",
-                tier.popular && "border-primary border-2 shadow-[0_0_80px_-15px_rgba(124,58,237,0.5)] scale-105 z-10"
+                "relative h-full flex flex-col border-white/5 transition-all duration-300 hover:shadow-[0_40px_80px_-15px_rgba(0,0,0,0.5)] hover:border-primary/30 overflow-hidden bg-[#12121A]",
+                tier.popular && "border-primary/50 border-2 shadow-[0_0_80px_-15px_rgba(124,58,237,0.3)] md:scale-105 z-10"
               )}>
                 <div className="absolute top-4 left-4">
-                  <Badge variant="secondary" className="bg-purple-50 text-primary border-purple-100 text-[10px] font-bold uppercase tracking-wider">
+                  <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/10 text-[10px] font-bold uppercase tracking-wider">
                     14-Day Free Trial
                   </Badge>
                 </div>
@@ -114,10 +114,10 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onStart }) => {
                 )}
                 
                 <CardHeader className="pt-12">
-                  <CardTitle className="text-2xl font-extrabold tracking-tight">{tier.name}</CardTitle>
-                  <CardDescription className="min-h-[40px] font-medium">{tier.description}</CardDescription>
+                  <CardTitle className="text-2xl font-extrabold tracking-tight text-white">{tier.name}</CardTitle>
+                  <CardDescription className="min-h-[40px] font-medium text-slate-400">{tier.description}</CardDescription>
                   <div className="mt-4 flex items-baseline gap-1">
-                    <span className="text-4xl font-black tracking-tight text-slate-900">{tier.price}</span>
+                    <span className="text-4xl font-black tracking-tight text-white">{tier.price}</span>
                     <span className="text-slate-500 font-bold text-sm">/month</span>
                   </div>
                 </CardHeader>
@@ -125,9 +125,9 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onStart }) => {
                 <CardContent className="flex-grow">
                   <ul className="space-y-4">
                     {tier.features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-3 text-sm">
+                      <li key={feature} className="flex items-start gap-3 text-sm text-slate-300">
                         <CheckCircle2 className="w-5 h-5 text-primary shrink-0" />
-                        <span>{feature}</span>
+                        <span className="font-medium">{feature}</span>
                       </li>
                     ))}
                   </ul>
@@ -137,8 +137,8 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onStart }) => {
                   <Button 
                     onClick={onStart}
                     className={cn(
-                      "w-full rounded-full py-6 text-lg transition-all duration-300", 
-                      tier.popular ? "bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20" : "bg-outline hover:bg-muted"
+                      "w-full rounded-2xl py-6 text-lg font-bold transition-all duration-300", 
+                      tier.popular ? "bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 text-white" : "bg-white/5 border-white/10 text-white hover:bg-white/10"
                     )}
                     variant={tier.popular ? "default" : "outline"}
                   >
@@ -150,7 +150,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onStart }) => {
           ))}
         </div>
 
-        <p className="text-center mt-12 text-muted-foreground text-sm">
+        <p className="text-center mt-12 text-slate-500 text-sm font-medium">
           Built for South African businesses. Prices in ZAR. 
           <a href="#" className="text-primary hover:underline ml-1">Custom enterprise plans available.</a>
         </p>

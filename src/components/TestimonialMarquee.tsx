@@ -45,51 +45,51 @@ const testimonials: Testimonial[] = [
 
 export const TestimonialMarquee: React.FC = () => {
   return (
-    <section className="py-32 bg-slate-50/50 overflow-hidden relative">
+    <section className="py-32 bg-[#0B0B0F] overflow-hidden relative">
       <div className="max-w-7xl mx-auto px-6 mb-20 text-center relative z-10">
-        <h2 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tighter mb-6">
+        <h2 className="text-4xl md:text-6xl font-black text-white tracking-tighter mb-6 italic">
           Loved by Local Leaders
         </h2>
-        <p className="text-slate-500 max-w-2xl mx-auto font-semibold text-lg leading-relaxed">
-          The smart choice for South African service providers automating their client acquisition.
+        <p className="text-slate-400 max-w-2xl mx-auto font-semibold text-lg leading-relaxed">
+          The smart choice for service providers automating their client acquisition.
         </p>
       </div>
 
       <div className="relative flex group">
         {/* Gradient Masks */}
-        <div className="absolute inset-y-0 left-0 w-32 md:w-64 bg-gradient-to-r from-slate-50 to-transparent z-20 pointer-events-none" />
-        <div className="absolute inset-y-0 right-0 w-32 md:w-64 bg-gradient-to-l from-slate-50 to-transparent z-20 pointer-events-none" />
+        <div className="absolute inset-y-0 left-0 w-32 md:w-64 bg-gradient-to-r from-[#0B0B0F] to-transparent z-20 pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-32 md:w-64 bg-gradient-to-l from-[#0B0B0F] to-transparent z-20 pointer-events-none" />
 
         <div className="flex overflow-hidden relative">
           <div className="flex animate-marquee-slower whitespace-nowrap group-hover:[animation-play-state:paused] py-10">
             {[...testimonials, ...testimonials, ...testimonials].map((t, idx) => (
               <div
                 key={idx}
-                className="inline-block w-[450px] mx-10 whitespace-normal shrink-0"
+                className="inline-block w-[320px] md:w-[450px] mx-4 md:mx-10 whitespace-normal shrink-0"
               >
-                <div className="h-full bg-white p-10 rounded-[2.5rem] border border-slate-100 shadow-[0_20px_50px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_70px_rgba(124,58,237,0.1)] hover:border-primary/20 transition-all duration-500 relative group/card flex flex-col justify-between">
+                <div className="h-full bg-[#12121A] p-10 rounded-[2.5rem] border border-white/5 shadow-[0_20px_50px_rgba(0,0,0,0.2)] hover:shadow-[0_20px_70px_rgba(124,58,237,0.15)] hover:border-primary/30 transition-all duration-500 relative group/card flex flex-col justify-between">
                   <div>
-                    <div className="absolute top-8 right-10 text-primary/5 group-hover/card:text-primary/10 transition-colors">
+                    <div className="absolute top-8 right-10 text-primary/10 group-hover/card:text-primary/20 transition-colors">
                       <Quote size={64} fill="currentColor" />
                     </div>
                     
                     <div className="flex gap-1.5 mb-8">
                       {[...Array(5)].map((_, i) => (
-                        <Star key={i} size={18} className="fill-amber-400 text-amber-400" />
+                        <Star key={i} size={18} className="fill-amber-500 text-amber-500" />
                       ))}
                     </div>
 
-                    <p className="text-slate-800 font-bold text-xl leading-relaxed mb-10 tracking-tight">
+                    <p className="text-white font-bold text-xl leading-relaxed mb-10 tracking-tight">
                       "{t.text}"
                     </p>
                   </div>
 
                   <div className="flex items-center gap-5">
-                    <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-primary/10 group-hover/card:border-primary/30 transition-colors shadow-lg">
+                    <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-primary/20 group-hover/card:border-primary/40 transition-colors shadow-lg">
                       <img src={t.avatar} alt={t.author} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                     </div>
                     <div>
-                      <div className="font-extrabold text-slate-900 text-lg">{t.author}</div>
+                      <div className="font-extrabold text-white text-lg">{t.author}</div>
                       <div className="text-[10px] text-primary font-black uppercase tracking-[0.2em]">{t.role}</div>
                     </div>
                   </div>

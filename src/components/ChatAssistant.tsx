@@ -250,6 +250,10 @@ export const ChatAssistant: React.FC<{ onStart: () => void }> = ({ onStart }) =>
       >
         <div className="absolute -inset-1 bg-primary/30 blur-lg rounded-full animate-pulse" />
         <MessageCircle className="w-8 h-8 relative z-10" />
+        
+        {/* Red Live Dot */}
+        <div className="absolute top-3 right-3 w-3 h-3 bg-red-500 rounded-full border-2 border-primary z-20" />
+        <div className="absolute top-3 right-3 w-3 h-3 bg-red-500 rounded-full animate-ping z-10 opacity-75" />
       </motion.button>
 
       <AnimatePresence>
@@ -258,29 +262,29 @@ export const ChatAssistant: React.FC<{ onStart: () => void }> = ({ onStart }) =>
             initial={{ opacity: 0, scale: 0.9, y: 20, transformOrigin: 'bottom right' }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="fixed bottom-8 right-8 w-[400px] max-w-[calc(100vw-2rem)] h-[600px] max-h-[calc(100vh-4rem)] bg-white rounded-3xl shadow-[0_32px_64px_-12px_rgba(0,0,0,0.15)] border border-slate-100 flex flex-col overflow-hidden z-[110]"
+            className="fixed bottom-8 right-8 w-[400px] max-w-[calc(100vw-2rem)] h-[600px] max-h-[calc(100vh-4rem)] bg-[#12121A] rounded-3xl shadow-[0_32px_64px_-12px_rgba(0,0,0,0.5)] border border-white/5 flex flex-col overflow-hidden z-[110]"
           >
             {/* Header */}
-            <div className="p-6 bg-slate-900 flex items-center justify-between">
+            <div className="p-6 bg-[#0B0B0F] flex items-center justify-between border-b border-white/5">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-purple-900/40">
+                <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
                   <Zap className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-white font-bold text-sm leading-tight">Purple AI Assistant</h3>
+                  <h3 className="text-white font-bold text-sm leading-tight italic">Purple AI assistant</h3>
                   <div className="flex items-center gap-1.5 mt-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Active & Online</span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.5)]" />
+                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Active & Online</span>
                   </div>
                 </div>
               </div>
-              <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white" onClick={() => setIsOpen(false)}>
+              <Button variant="ghost" size="icon" className="text-slate-500 hover:text-white" onClick={() => setIsOpen(false)}>
                 <X className="w-5 h-5" />
               </Button>
             </div>
 
             {/* Progress bar */}
-            <div className="h-1 w-full bg-slate-100">
+            <div className="h-1 w-full bg-white/5">
               <motion.div 
                 className="h-full bg-primary" 
                 initial={{ width: 0 }}
@@ -289,7 +293,7 @@ export const ChatAssistant: React.FC<{ onStart: () => void }> = ({ onStart }) =>
             </div>
 
             {/* Chat Content */}
-            <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-6 bg-slate-50/50">
+            <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-6 bg-[#0B0B0F]">
               <AnimatePresence mode="popLayout">
                 {messages.map((msg, idx) => (
                   <motion.div
@@ -302,10 +306,10 @@ export const ChatAssistant: React.FC<{ onStart: () => void }> = ({ onStart }) =>
                     )}
                   >
                     <div className={cn(
-                      "p-4 rounded-2xl text-sm leading-relaxed font-medium shadow-sm",
+                      "p-4 rounded-2xl text-sm leading-relaxed font-semibold shadow-sm",
                       msg.sender === 'ai' 
-                        ? "bg-white text-slate-900 rounded-tl-none border border-slate-100" 
-                        : "bg-slate-900 text-white rounded-tr-none"
+                        ? "bg-[#16161E] text-white rounded-tl-none border border-white/5" 
+                        : "bg-primary text-white rounded-tr-none"
                     )}>
                       {msg.text}
                     </div>
@@ -318,7 +322,7 @@ export const ChatAssistant: React.FC<{ onStart: () => void }> = ({ onStart }) =>
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={() => handleOptionClick(opt)}
-                            className="px-4 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-600 hover:border-primary hover:text-primary transition-all shadow-sm"
+                            className="px-4 py-2 bg-[#1A1A24] border border-white/5 rounded-xl text-xs font-bold text-slate-300 hover:border-primary hover:text-white transition-all shadow-sm"
                           >
                             {opt.label}
                           </motion.button>
@@ -332,12 +336,12 @@ export const ChatAssistant: React.FC<{ onStart: () => void }> = ({ onStart }) =>
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="flex gap-2 p-4 bg-white border border-slate-100 rounded-2xl rounded-tl-none w-16"
+                    className="flex gap-2 p-4 bg-[#16161E] border border-white/5 rounded-2xl rounded-tl-none w-16"
                   >
                     <div className="flex gap-1">
-                      <span className="w-1 h-1 rounded-full bg-slate-300 animate-bounce" />
-                      <span className="w-1 h-1 rounded-full bg-slate-300 animate-bounce [animation-delay:0.2s]" />
-                      <span className="w-1 h-1 rounded-full bg-slate-300 animate-bounce [animation-delay:0.4s]" />
+                      <span className="w-1 h-1 rounded-full bg-slate-500 animate-bounce" />
+                      <span className="w-1 h-1 rounded-full bg-slate-500 animate-bounce [animation-delay:0.2s]" />
+                      <span className="w-1 h-1 rounded-full bg-slate-500 animate-bounce [animation-delay:0.4s]" />
                     </div>
                   </motion.div>
                 )}
@@ -349,14 +353,14 @@ export const ChatAssistant: React.FC<{ onStart: () => void }> = ({ onStart }) =>
                     animate={{ opacity: 1, y: 0 }}
                     className="space-y-4 pt-4"
                   >
-                     <div className="p-1 bg-gradient-to-br from-primary to-blue-500 rounded-2xl shadow-xl">
-                        <div className="bg-white p-6 rounded-[calc(1rem-2px)] space-y-4">
+                     <div className="p-[1px] bg-gradient-to-br from-primary to-purple-600 rounded-2xl shadow-2xl">
+                        <div className="bg-[#12121A] p-6 rounded-[calc(1rem-1px)] space-y-4">
                            <div className="flex items-center gap-3 text-primary">
                               <CheckCircle2 className="w-6 h-6" />
-                              <span className="text-sm font-black uppercase tracking-wider">Our recommendation</span>
+                              <span className="text-sm font-black uppercase tracking-[0.2em]">Our recommendation</span>
                            </div>
                            <div className="space-y-3">
-                              <Button className="w-full bg-primary py-6 rounded-xl font-bold shadow-lg shadow-purple-900/20" onClick={() => { setIsOpen(false); onStart(); }}>
+                              <Button className="w-full bg-primary text-white py-6 rounded-xl font-bold shadow-lg shadow-primary/20 hover:bg-primary/90" onClick={() => { setIsOpen(false); onStart(); }}>
                                  Get Started Now
                                  <ChevronRight className="ml-2 w-4 h-4" />
                               </Button>
@@ -369,9 +373,9 @@ export const ChatAssistant: React.FC<{ onStart: () => void }> = ({ onStart }) =>
             </div>
 
             {/* Footer */}
-            <div className="p-4 border-t border-slate-100 bg-white flex items-center justify-between">
-               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Powered by Purple AI Engineering</span>
-               <div className="flex items-center gap-2 opacity-30">
+            <div className="p-4 border-t border-white/5 bg-[#0B0B0F] flex items-center justify-between">
+               <span className="text-[10px] font-bold text-slate-600 uppercase tracking-widest leading-none mt-0.5">Powered by Purple AI Core</span>
+               <div className="flex items-center gap-2 opacity-20">
                   <Zap className="w-3 h-3 text-primary" />
                </div>
             </div>

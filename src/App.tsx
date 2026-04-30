@@ -51,7 +51,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground selection:bg-primary/20 transition-colors duration-500">
+    <div className="dark min-h-screen bg-background text-foreground selection:bg-primary/20 transition-colors duration-500">
       <AnimatePresence mode="wait">
         {view === 'landing' && (
           <motion.div

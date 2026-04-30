@@ -52,11 +52,11 @@ const faqs: FAQItem[] = [
   }
 ];
 
-const FAQAccordionItem = ({ item, isOpen, onClick }: { item: FAQItem; isOpen: boolean; onClick: () => void }) => {
+const FAQAccordionItem: React.FC<{ item: FAQItem; isOpen: boolean; onClick: () => void }> = ({ item, isOpen, onClick }) => {
   return (
     <div className={cn(
-      "border border-slate-100 rounded-[2rem] overflow-hidden transition-all duration-500",
-      isOpen ? "bg-white shadow-[0_20px_60px_-10px_rgba(0,0,0,0.1),0_10px_30px_-10px_rgba(124,58,237,0.1)] border-primary/20" : "bg-slate-50/50 hover:bg-white hover:border-slate-200 hover:shadow-[0_10px_30px_-5px_rgba(0,0,0,0.05)]"
+      "border transition-all duration-500 rounded-[2rem] overflow-hidden",
+      isOpen ? "bg-[#16161E] shadow-[0_20px_60px_-10px_rgba(0,0,0,0.3),0_10px_30px_-10px_rgba(124,58,237,0.2)] border-primary/20" : "bg-[#0E0E14] border-white/5 hover:bg-[#16161E] hover:border-white/10 hover:shadow-[0_10px_30px_-5px_rgba(0,0,0,0.2)]"
     )}>
       <button
         onClick={onClick}
@@ -64,13 +64,13 @@ const FAQAccordionItem = ({ item, isOpen, onClick }: { item: FAQItem; isOpen: bo
       >
         <span className={cn(
           "text-lg font-bold transition-colors duration-300",
-          isOpen ? "text-primary" : "text-slate-900 group-hover:text-primary"
+          isOpen ? "text-primary" : "text-white group-hover:text-primary"
         )}>
           {item.question}
         </span>
         <div className={cn(
           "w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500",
-          isOpen ? "bg-primary text-white rotate-180" : "bg-white text-slate-400 group-hover:text-primary shadow-sm"
+          isOpen ? "bg-primary text-white rotate-180" : "bg-white/5 text-slate-400 group-hover:text-primary shadow-sm"
         )}>
           <ChevronDown size={18} />
         </div>
@@ -83,7 +83,7 @@ const FAQAccordionItem = ({ item, isOpen, onClick }: { item: FAQItem; isOpen: bo
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.4, ease: "easeInOut" }}
           >
-            <div className="px-8 pb-8 text-slate-500 font-medium leading-relaxed">
+            <div className="px-8 pb-8 text-slate-400 font-medium leading-relaxed">
               {item.answer}
             </div>
           </motion.div>
@@ -97,11 +97,11 @@ export const FAQSection = ({ onStart }: { onStart: () => void }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="py-32 px-6 bg-white relative overflow-hidden">
+    <section className="py-20 md:py-32 px-6 bg-[#0B0B0F] relative overflow-hidden">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px] -z-10" />
       
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-16">
+        <div className="text-center mb-12 md:mb-16">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -111,10 +111,10 @@ export const FAQSection = ({ onStart }: { onStart: () => void }) => {
             <HelpCircle size={14} />
             Support
           </motion.div>
-          <h2 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tighter mb-6 italic">
+          <h2 className="text-3xl md:text-6xl font-black text-white tracking-tighter mb-6 italic">
             Frequently Asked Questions
           </h2>
-          <p className="text-slate-500 font-semibold text-lg">
+          <p className="text-slate-400 font-semibold text-lg">
             Everything you need to know about Purple before getting started.
           </p>
         </div>
@@ -131,11 +131,11 @@ export const FAQSection = ({ onStart }: { onStart: () => void }) => {
         </div>
 
         {/* Bottom CTA block */}
-        <motion.div
+          <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-24 p-12 bg-slate-900 rounded-[3rem] text-center relative overflow-hidden group border border-primary/20 shadow-[0_50px_100px_-20px_rgba(124,58,237,0.3),0_30px_60px_-30px_rgba(0,0,0,0.5)]"
+          className="mt-20 md:mt-24 p-6 md:p-12 bg-slate-900 rounded-[2rem] md:rounded-[3rem] text-center relative overflow-hidden group border border-primary/20 shadow-[0_50px_100px_-20px_rgba(124,58,237,0.3),0_30px_60px_-30px_rgba(0,0,0,0.5)]"
         >
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-[100px] group-hover:scale-125 transition-transform duration-1000" />
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-secondary/10 rounded-full blur-[100px]" />

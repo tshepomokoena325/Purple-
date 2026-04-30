@@ -17,7 +17,7 @@ export const Logo: React.FC<LogoProps> = ({ className, iconOnly = false }) => {
         </div>
       </div>
       {!iconOnly && (
-        <span className="font-heading font-bold text-xl tracking-tighter">
+        <span className="font-heading font-bold text-xl tracking-tighter text-white">
           Purple<span className="text-primary">.</span>
         </span>
       )}
