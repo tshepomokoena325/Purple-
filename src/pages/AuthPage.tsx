@@ -16,6 +16,15 @@ import {
 } from 'lucide-react';
 import { Logo } from '../components/Logo';
 import { cn } from '../../lib/utils';
+import { auth, db } from '../lib/firebase';
+import { 
+  signInWithEmailAndPassword, 
+  createUserWithEmailAndPassword,
+  updateProfile
+} from 'firebase/auth';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { toast } from 'sonner';
+import { PlanTier } from '../contexts/SubscriptionContext';
 
 // Reuse shadcn-like components if available, otherwise define minimal premium ones
 const Input = ({ label, type, placeholder, icon: Icon, value, onChange, error, togglePassword }: any) => {
@@ -82,29 +91,77 @@ const Button = ({ children, className, loading, ...props }: any) => (
 
 interface AuthPageProps {
   onSuccess: (user: any) => void;
+  onBackToHome?: () => void;
   initialTab?: 'login' | 'signup';
+  initialPlan?: PlanTier;
 }
 
-export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, initialTab = 'login' }) => {
+export const AuthPage: React.FC<AuthPageProps> = ({ 
+  onSuccess, 
+  onBackToHome, 
+  initialTab = 'login',
+  initialPlan = 'Starter'
+}) => {
   const [activeTab, setActiveTab] = useState<'login' | 'signup'>(initialTab);
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  
+  // Form State
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    fullName: '',
+    businessName: '',
+    businessType: 'Solar Company',
+    confirmPassword: ''
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
+
+    try {
       if (activeTab === 'signup') {
+        if (formData.password !== formData.confirmPassword) {
+            toast.error("Passwords do not match");
+            setIsLoading(false);
+            return;
+        }
+
+        const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+        const user = userCredential.user;
+
+        // Create user profile in Firestore
+        await setDoc(doc(db, 'users', user.uid), {
+          userId: user.uid,
+          email: formData.email,
+          fullName: formData.fullName,
+          businessName: formData.businessName,
+          businessType: formData.businessType,
+          plan: initialPlan,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        });
+
+        await updateProfile(user, { displayName: formData.fullName });
+
         setShowSuccess(true);
         setTimeout(() => {
-          onSuccess({ name: 'User' });
+          onSuccess(user);
         }, 2000);
       } else {
-        onSuccess({ name: 'User' });
+        const userCredential = await signInWithEmailAndPassword(auth, formData.email, formData.password);
+        onSuccess(userCredential.user);
       }
-    }, 1500);
+    } catch (error: any) {
+      toast.error(error.message || "Authentication failed");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (showSuccess) {
@@ -122,7 +179,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, initialTab = 'log
             </div>
           </div>
           <div className="space-y-2">
-            <h1 className="text-4xl font-black tracking-tight italic">Welcome to Purple 🚀</h1>
+            <h1 className="text-4xl font-black tracking-tight">Welcome to Purple 🚀</h1>
             <p className="text-slate-400 font-medium">Let's get your automation set up.</p>
           </div>
           <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
@@ -147,14 +204,19 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, initialTab = 'log
         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-secondary/10 rounded-full blur-[120px] -z-10" />
         
         <div className="relative z-10">
-          <Logo className="mb-20 text-white" />
+          <button 
+            onClick={onBackToHome}
+            className="mb-20 hover:opacity-80 transition-opacity cursor-pointer text-left"
+          >
+            <Logo className="text-white" />
+          </button>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
             className="max-w-xl space-y-8"
           >
-            <h1 className="text-6xl font-black tracking-tight leading-[1.1] italic">
+            <h1 className="text-6xl font-black tracking-tight leading-[1.1]">
               Automate Your Lead <br/> 
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-400">Follow-Up.</span>
             </h1>
@@ -187,7 +249,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, initialTab = 'log
         </div>
 
         <div className="relative z-10 border-t border-white/5 pt-10 mt-20">
-           <p className="text-slate-500 font-bold italic tracking-wide">
+           <p className="text-slate-500 font-bold tracking-wide">
              "Purple paid for itself in the first week just from improved follow-up speed."
            </p>
            <span className="text-xs font-black uppercase tracking-[0.2em] text-primary mt-2 block">Andre P., Contractor</span>
@@ -204,7 +266,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, initialTab = 'log
           className="w-full max-w-md z-10"
         >
           <div className="mb-10 text-center lg:text-left">
-            <h2 className="text-3xl font-black tracking-tight mb-2 italic">
+            <h2 className="text-3xl font-black tracking-tight mb-2">
                {activeTab === 'login' ? 'Welcome Back.' : 'Get Started.'}
             </h2>
             <p className="text-slate-500 font-medium">
@@ -250,12 +312,16 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, initialTab = 'log
                     type="email" 
                     placeholder="name@business.co.za" 
                     icon={Mail} 
+                    value={formData.email}
+                    onChange={(e: any) => handleInputChange('email', e.target.value)}
                   />
                   <Input 
                     label="Password" 
                     type="password" 
                     placeholder="••••••••" 
                     icon={Lock} 
+                    value={formData.password}
+                    onChange={(e: any) => handleInputChange('password', e.target.value)}
                   />
                   <div className="flex items-center justify-between">
                     <label className="flex items-center gap-2 cursor-pointer group">
@@ -279,17 +345,21 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, initialTab = 'log
                   className="space-y-6"
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <Input label="Full Name" type="text" placeholder="John Doe" icon={User} />
-                    <Input label="Business Name" type="text" placeholder="Doe Solar Pty" icon={Briefcase} />
+                    <Input label="Full Name" type="text" placeholder="John Doe" icon={User} value={formData.fullName} onChange={(e: any) => handleInputChange('fullName', e.target.value)} />
+                    <Input label="Business Name" type="text" placeholder="Doe Solar Pty" icon={Briefcase} value={formData.businessName} onChange={(e: any) => handleInputChange('businessName', e.target.value)} />
                   </div>
-                  <Input label="Email Address" type="email" placeholder="name@business.so.za" icon={Mail} />
+                  <Input label="Email Address" type="email" placeholder="name@business.so.za" icon={Mail} value={formData.email} onChange={(e: any) => handleInputChange('email', e.target.value)} />
                   <Input label="Phone Number" type="tel" placeholder="+27 71 123 4567" icon={Phone} />
                   
                   <div className="space-y-2 group">
                     <label className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-500 group-focus-within:text-primary">
                       Business Type
                     </label>
-                    <select className="w-full bg-[#12121A] border border-[#2A2A35] rounded-2xl py-4 px-6 text-white appearance-none focus:border-primary focus:shadow-[0_0_20px_rgba(124,58,237,0.15)] outline-none group-focus-within:border-primary">
+                    <select 
+                      value={formData.businessType}
+                      onChange={(e) => handleInputChange('businessType', e.target.value)}
+                      className="w-full bg-[#12121A] border border-[#2A2A35] rounded-2xl py-4 px-6 text-white appearance-none focus:border-primary focus:shadow-[0_0_20px_rgba(124,58,237,0.15)] outline-none group-focus-within:border-primary"
+                    >
                       <option>Solar Company</option>
                       <option>Dental Clinic</option>
                       <option>Security Company</option>
@@ -300,8 +370,8 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess, initialTab = 'log
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <Input label="Password" type="password" placeholder="••••••••" icon={Lock} />
-                    <Input label="Confirm Password" type="password" placeholder="••••••••" icon={Lock} />
+                    <Input label="Password" type="password" placeholder="••••••••" icon={Lock} value={formData.password} onChange={(e: any) => handleInputChange('password', e.target.value)} />
+                    <Input label="Confirm Password" type="password" placeholder="••••••••" icon={Lock} value={formData.confirmPassword} onChange={(e: any) => handleInputChange('confirmPassword', e.target.value)} />
                   </div>
                 </motion.div>
               )}

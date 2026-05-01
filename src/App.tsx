@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { cn } from '../lib/utils';
 import { LandingPage } from './pages/LandingPage';
 import { Dashboard } from './pages/Dashboard';
 import { AuthPage } from './pages/AuthPage';
@@ -8,15 +9,34 @@ type AppView = 'landing' | 'auth' | 'dashboard';
 
 export default function App() {
   const [view, setView] = useState<AppView>('landing');
+  const [selectedPlan, setSelectedPlan] = useState<string>('Starter');
   const [isLoading, setIsLoading] = useState(true);
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
 
   useEffect(() => {
+    // Initial theme setup
+    const saved = localStorage.getItem('purple-theme') as 'dark' | 'light' | null;
+    if (saved) {
+      setTheme(saved);
+      document.documentElement.setAttribute('data-theme', saved);
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+
     // Simulate initial load for that premium feel
     const timer = setTimeout(() => setIsLoading(false), 800);
     return () => clearTimeout(timer);
   }, []);
 
-  const handleStart = () => {
+  const toggleTheme = () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('purple-theme', newTheme);
+  };
+
+  const handleStart = (plan?: string) => {
+    if (plan) setSelectedPlan(plan);
     setView('auth');
   };
 
@@ -51,7 +71,10 @@ export default function App() {
   }
 
   return (
-    <div className="dark min-h-screen bg-background text-foreground selection:bg-primary/20 transition-colors duration-500">
+    <div className={cn(
+      theme === 'dark' ? "dark" : "",
+      "min-h-screen bg-background text-foreground selection:bg-primary/20 transition-colors duration-500"
+    )}>
       <AnimatePresence mode="wait">
         {view === 'landing' && (
           <motion.div
@@ -73,7 +96,11 @@ export default function App() {
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
           >
-            <AuthPage onSuccess={handleAuthSuccess} />
+            <AuthPage 
+              onSuccess={handleAuthSuccess} 
+              onBackToHome={handleLogout} 
+              initialPlan={selectedPlan as any}
+            />
           </motion.div>
         )}
 
@@ -85,7 +112,11 @@ export default function App() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
           >
-            <Dashboard onLogout={handleLogout} />
+            <Dashboard 
+              onLogout={handleLogout} 
+              theme={theme} 
+              toggleTheme={toggleTheme} 
+            />
           </motion.div>
         )}
       </AnimatePresence>

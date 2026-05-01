@@ -47,7 +47,7 @@ export const TestimonialMarquee: React.FC = () => {
   return (
     <section className="py-32 bg-[#0B0B0F] overflow-hidden relative">
       <div className="max-w-7xl mx-auto px-6 mb-20 text-center relative z-10">
-        <h2 className="text-4xl md:text-6xl font-black text-white tracking-tighter mb-6 italic">
+        <h2 className="text-4xl md:text-6xl font-black text-white tracking-tighter mb-6">
           Loved by Local Leaders
         </h2>
         <p className="text-slate-400 max-w-2xl mx-auto font-semibold text-lg leading-relaxed">

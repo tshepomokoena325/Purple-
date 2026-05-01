@@ -93,7 +93,7 @@ const FAQAccordionItem: React.FC<{ item: FAQItem; isOpen: boolean; onClick: () =
   );
 };
 
-export const FAQSection = ({ onStart }: { onStart: () => void }) => {
+export const FAQSection = ({ onStart, onBookDemo }: { onStart: () => void; onBookDemo?: () => void }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
@@ -111,7 +111,7 @@ export const FAQSection = ({ onStart }: { onStart: () => void }) => {
             <HelpCircle size={14} />
             Support
           </motion.div>
-          <h2 className="text-3xl md:text-6xl font-black text-white tracking-tighter mb-6 italic">
+          <h2 className="text-3xl md:text-6xl font-black text-white tracking-tighter mb-6">
             Frequently Asked Questions
           </h2>
           <p className="text-slate-400 font-semibold text-lg">
@@ -145,7 +145,7 @@ export const FAQSection = ({ onStart }: { onStart: () => void }) => {
               <MessageCircle size={32} />
             </div>
             <div className="space-y-4">
-              <h3 className="text-3xl md:text-4xl font-black text-white italic tracking-tight">Still Have Questions?</h3>
+              <h3 className="text-3xl md:text-4xl font-black text-white tracking-tight">Still Have Questions?</h3>
               <p className="text-slate-400 font-medium text-lg max-w-xl mx-auto">
                 Book a demo and we'll show you exactly how Purple can work for your business.
               </p>
@@ -153,7 +153,7 @@ export const FAQSection = ({ onStart }: { onStart: () => void }) => {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-4">
               <Button 
                 size="lg" 
-                onClick={onStart} 
+                onClick={onBookDemo} 
                 className="px-12 py-8 bg-primary text-white rounded-2xl font-bold text-xl hover:shadow-[0_20px_50px_rgba(124,58,237,0.3)] transition-all transform hover:-translate-y-1 w-full sm:w-auto"
               >
                 Book Demo

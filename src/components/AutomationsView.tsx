@@ -30,14 +30,14 @@ export const AutomationsView: React.FC = () => {
     <div className="space-y-8 animate-in fade-in slide-in-from-top-4 duration-500 overflow-hidden">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-heading font-bold">Automation Builder</h2>
+          <h2 className="text-2xl font-heading font-bold text-white">Automation Builder</h2>
           <p className="text-sm text-muted-foreground">Create intelligent workflows that work while you sleep.</p>
         </div>
         <div className="flex items-center gap-3">
-          <Button variant="outline" className="rounded-xl h-10 border-border/50 font-bold">
+          <Button variant="outline" className="rounded-xl h-10 border-border/50 font-bold bg-transparent hover:bg-secondary transition-all">
              Template Library
           </Button>
-          <Button className="rounded-xl h-10 font-bold bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20">
+          <Button className="rounded-xl h-10 font-bold bg-[#7C3AED] hover:bg-[#6D28D9] text-white shadow-lg shadow-purple-900/20">
              <Plus className="w-4 h-4 mr-2" />
              Create Workflow
           </Button>
@@ -51,7 +51,7 @@ export const AutomationsView: React.FC = () => {
           { label: "Successful Bookings", value: "142" },
           { label: "AI Hours Saved", value: "82h" }
         ].map((stat, idx) => (
-          <div key={idx} className="p-8 rounded-2xl bg-[#12121A] border border-[#2A2A35] text-center shadow-xl">
+          <div key={idx} className="p-8 rounded-2xl bg-[#12121A] border border-[#2A2A35] text-center shadow-xl group hover:border-primary/50 transition-all">
              <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-3">{stat.label}</p>
              <p className="text-3xl font-black text-white">{stat.value}</p>
           </div>
@@ -148,7 +148,7 @@ export const AutomationsView: React.FC = () => {
                        <p className="text-[10px] uppercase font-black tracking-widest text-slate-500">Action: WhatsApp</p>
                     </div>
                     <p className="text-sm font-extrabold text-white">Send AI Follow-up Message</p>
-                    <div className="p-4 bg-[#0B0B0F] rounded-xl border border-[#2A2A35] text-[11px] leading-relaxed italic text-slate-400 font-medium">
+                    <div className="p-4 bg-[#0B0B0F] rounded-xl border border-[#2A2A35] text-[11px] leading-relaxed text-slate-400 font-medium">
                        "Hi [name], I saw you're interested in [offer]. I'm the Purple AI assistant. When can we talk?"
                     </div>
                  </div>

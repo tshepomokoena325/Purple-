@@ -81,7 +81,7 @@ const QUESTIONS: Question[] = [
   }
 ];
 
-export const ChatAssistant: React.FC<{ onStart: () => void }> = ({ onStart }) => {
+export const ChatAssistant: React.FC<{ onStart: () => void; onBookDemo?: () => void }> = ({ onStart, onBookDemo }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(0); // 0 is initial, 1-6 are questions
   const [answers, setAnswers] = useState<Record<number, string>>({});
@@ -271,7 +271,7 @@ export const ChatAssistant: React.FC<{ onStart: () => void }> = ({ onStart }) =>
                   <Zap className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-white font-bold text-sm leading-tight italic">Purple AI assistant</h3>
+                  <h3 className="text-white font-bold text-sm leading-tight">Purple AI assistant</h3>
                   <div className="flex items-center gap-1.5 mt-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.5)]" />
                     <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Active & Online</span>
@@ -360,10 +360,17 @@ export const ChatAssistant: React.FC<{ onStart: () => void }> = ({ onStart }) =>
                               <span className="text-sm font-black uppercase tracking-[0.2em]">Our recommendation</span>
                            </div>
                            <div className="space-y-3">
-                              <Button className="w-full bg-primary text-white py-6 rounded-xl font-bold shadow-lg shadow-primary/20 hover:bg-primary/90" onClick={() => { setIsOpen(false); onStart(); }}>
-                                 Get Started Now
-                                 <ChevronRight className="ml-2 w-4 h-4" />
-                              </Button>
+                               {messages[messages.length - 1]?.text.toLowerCase().includes('demo') ? (
+                                 <Button className="w-full bg-primary text-white py-6 rounded-xl font-bold shadow-lg shadow-primary/20 hover:bg-primary/90" onClick={() => { setIsOpen(false); onBookDemo?.(); }}>
+                                   Book Your Demo
+                                   <ChevronRight className="ml-2 w-4 h-4" />
+                                 </Button>
+                               ) : (
+                                 <Button className="w-full bg-primary text-white py-6 rounded-xl font-bold shadow-lg shadow-primary/20 hover:bg-primary/90" onClick={() => { setIsOpen(false); onStart(); }}>
+                                   Get Started Now
+                                   <ChevronRight className="ml-2 w-4 h-4" />
+                                 </Button>
+                               )}
                            </div>
                         </div>
                      </div>

@@ -66,8 +66,8 @@ export const FeaturesGrid: React.FC = () => {
     <section className="py-24 px-6 bg-[#0E0E14] relative" id="features">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-20 text-white">
-          <h2 className="text-4xl md:text-5xl font-heading mb-6 tracking-tight italic font-black">
-            Everything You Need To <span className="text-primary italic">Dominate</span> Your Market
+          <h2 className="text-4xl md:text-5xl font-heading mb-6 tracking-tight font-black">
+            Everything You Need To <span className="text-primary">Dominate</span> Your Market
           </h2>
           <p className="text-slate-400 text-xl max-w-3xl mx-auto font-medium">
             We've built the ultimate toolset for service businesses to automate growth and reclaim their time.

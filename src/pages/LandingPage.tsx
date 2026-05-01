@@ -20,9 +20,11 @@ import { DashboardMockup } from '../components/DashboardMockup';
 import { ChatAssistant } from '../components/ChatAssistant';
 import { TestimonialMarquee } from '../components/TestimonialMarquee';
 import { FAQSection } from '../components/FAQSection';
+import { BookDemoModal } from '../components/BookDemoModal';
+import { Toaster } from '../../components/ui/sonner';
 
 interface LandingPageProps {
-  onStart: () => void;
+  onStart: (plan?: string) => void;
 }
 
 const AnimatedNumber = ({ value, decimals = 0, suffix = "" }: { value: number; decimals?: number; suffix?: string }) => {
@@ -50,6 +52,16 @@ const AnimatedNumber = ({ value, decimals = 0, suffix = "" }: { value: number; d
 };
 
 export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
+  const [isBookingModalOpen, setIsBookingModalOpen] = React.useState(false);
+
+  const handleBookDemo = () => {
+    setIsBookingModalOpen(true);
+  };
+
+  const handleStart = (plan?: string) => {
+    onStart(plan);
+  };
+
   return (
     <div className="min-h-screen bg-[#0B0B0F] selection:bg-primary/20 selection:text-primary font-sans overflow-x-hidden text-white">
       {/* Header */}
@@ -63,8 +75,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
             <a href="#" className="hover:text-primary transition-colors">Integrations</a>
           </nav>
           <div className="flex items-center gap-4">
-            <Button variant="ghost" className="hidden sm:inline-flex text-slate-400 hover:text-primary" onClick={onStart}>Login</Button>
-            <Button onClick={onStart} className="rounded-full px-6 bg-primary text-white hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 font-semibold">Start Free Trial</Button>
+            <Button variant="ghost" className="hidden sm:inline-flex text-slate-400 hover:text-primary" onClick={() => onStart()}>Login</Button>
+            <Button onClick={() => onStart('Starter')} className="rounded-full px-6 bg-primary text-white hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 font-semibold">Start Free Trial</Button>
           </div>
         </div>
       </nav>
@@ -115,10 +127,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mb-12"
             >
-              <Button size="lg" className="px-8 py-6 bg-primary text-white rounded-xl font-bold text-lg hover:shadow-2xl hover:shadow-primary/30 transition-all w-full sm:w-auto" onClick={onStart}>
+              <Button size="lg" className="px-8 py-6 bg-primary text-white rounded-xl font-bold text-lg hover:shadow-2xl hover:shadow-primary/30 transition-all w-full sm:w-auto" onClick={() => onStart('Starter')}>
                 Start Free 14-Day Trial
               </Button>
-              <Button size="lg" variant="outline" className="px-8 py-6 bg-white/5 border border-white/10 text-white rounded-xl font-bold text-lg hover:bg-white/10 transition-all w-full sm:w-auto" onClick={onStart}>
+              <Button size="lg" variant="outline" className="px-8 py-6 bg-white/5 border border-white/10 text-white rounded-xl font-bold text-lg hover:bg-white/10 transition-all w-full sm:w-auto" onClick={handleBookDemo}>
                 Book Demo
               </Button>
             </motion.div>
@@ -180,7 +192,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
               }
             ].map((item, idx) => (
               <div key={idx} className="relative group">
-                <div className="text-8xl font-black text-white/5 absolute -top-10 -left-6 group-hover:text-primary/10 transition-colors uppercase italic">{item.step}</div>
+                <div className="text-8xl font-black text-white/5 absolute -top-10 -left-6 group-hover:text-primary/10 transition-colors uppercase">{item.step}</div>
                 <div className="relative pt-4">
                    <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6 border border-primary/20">
                       <item.icon className="w-6 h-6" />
@@ -218,11 +230,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
         </div>
       </section>
 
-      <PricingSection onStart={onStart} />
+      <PricingSection onStart={onStart} onBookDemo={handleBookDemo} />
 
       <TestimonialMarquee />
 
-      <FAQSection onStart={onStart} />
+      <FAQSection onStart={() => onStart()} onBookDemo={handleBookDemo} />
 
       {/* Footer */}
       <footer className="py-20 px-6 md:px-12 bg-[#08080C] border-t border-white/5">
@@ -260,7 +272,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart }) => {
         </div>
       </footer>
       
-      <ChatAssistant onStart={onStart} />
+      <ChatAssistant onStart={() => onStart()} />
+      
+      <BookDemoModal 
+        isOpen={isBookingModalOpen} 
+        onClose={() => setIsBookingModalOpen(false)} 
+      />
+      
+      <Toaster />
     </div>
   );
 };

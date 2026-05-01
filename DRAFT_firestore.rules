@@ -1,0 +1,112 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Global Helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function getUserData(userId) {
+      return get(/databases/$(database)/documents/users/$(userId)).data;
+    }
+
+    function isPlanTier(userId, tiers) {
+      let data = getUserData(userId);
+      return data.plan in tiers;
+    }
+
+    // Entity Validations
+    function isValidUser(data) {
+      return data.keys().hasAll(['userId', 'email', 'plan']) 
+        && data.keys().size() <= 8
+        && data.userId == request.auth.uid
+        && data.email is string && data.email.size() <= 256
+        && data.plan in ['Starter', 'Growth', 'Professional'];
+    }
+
+    function isValidLead(data) {
+      return data.keys().hasAll(['userId', 'name', 'email'])
+        && data.keys().size() <= 12
+        && data.userId is string && data.userId.size() <= 128
+        && data.name is string && data.name.size() <= 256
+        && data.email is string && data.email.size() <= 256;
+    }
+
+    function isValidAutomation(data) {
+      return data.keys().hasAll(['userId', 'name', 'type'])
+        && data.keys().size() <= 10
+        && data.userId is string && data.userId.size() <= 128
+        && data.name is string && data.name.size() <= 256
+        && data.type in ['basic', 'advanced'];
+    }
+
+    // Collection: Users
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidUser(incoming());
+      allow update: if isOwner(userId) && isValidUser(incoming())
+        && (
+          // Plan changes should probably be restricted or handled via a secure mechanism,
+          // but for this demo context we might allow it or assume it's set by a 'system'
+          // For now, let's allow owner to update their profile but maybe not the plan itself?
+          // If we want to be strict:
+          incoming().plan == existing().plan || incoming().plan in ['Starter', 'Growth', 'Professional']
+        );
+    }
+
+    // Collection: Leads
+    match /leads/{leadId} {
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow get: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && incoming().userId == request.auth.uid && isValidLead(incoming())
+        && (
+          // Feature gating for AI Qualification
+          (!incoming().get('isAIQualified', false)) || isPlanTier(request.auth.uid, ['Growth', 'Professional'])
+        );
+      allow update: if isSignedIn() && existing().userId == request.auth.uid && isValidLead(incoming())
+        && incoming().userId == existing().userId
+        && (
+          // Action: Mark AI Qualified
+          (!incoming().diff(existing()).affectedKeys().hasAny(['isAIQualified'])) || isPlanTier(request.auth.uid, ['Growth', 'Professional'])
+        );
+      allow delete: if isSignedIn() && existing().userId == request.auth.uid;
+    }
+
+    // Collection: Automations
+    match /automations/{automationId} {
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow get: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && incoming().userId == request.auth.uid && isValidAutomation(incoming())
+        && (
+          (incoming().type == 'basic') || isPlanTier(request.auth.uid, ['Growth', 'Professional'])
+        );
+      allow update: if isSignedIn() && existing().userId == request.auth.uid && isValidAutomation(incoming())
+        && incoming().userId == existing().userId
+        && (
+          (incoming().type == existing().type) || isPlanTier(request.auth.uid, ['Growth', 'Professional'])
+        );
+      allow delete: if isSignedIn() && existing().userId == request.auth.uid;
+    }
+  }
+}

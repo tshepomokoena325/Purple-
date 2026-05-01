@@ -21,7 +21,7 @@ const tiers: PricingTier[] = [
     price: "R499",
     description: "Perfect for solo practitioners and small businesses.",
     features: [
-      "Up to 500 Leads / Month",
+      "Up to 50 Leads / Month",
       "1 User",
       "Lead Capture Forms",
       "Basic Follow-Up Automation",
@@ -38,7 +38,7 @@ const tiers: PricingTier[] = [
     description: "The complete engine for growing service businesses.",
     popular: true,
     features: [
-      "Up to 2,500 Leads / Month",
+      "Up to 500 Leads / Month",
       "5 Users",
       "Everything in Starter",
       "AI Lead Qualification",
@@ -70,10 +70,11 @@ const tiers: PricingTier[] = [
 ];
 
 interface PricingSectionProps {
-  onStart?: () => void;
+  onStart?: (plan: string) => void;
+  onBookDemo?: () => void;
 }
 
-export const PricingSection: React.FC<PricingSectionProps> = ({ onStart }) => {
+export const PricingSection: React.FC<PricingSectionProps> = ({ onStart, onBookDemo }) => {
   return (
     <section className="py-24 px-6 relative bg-[#0B0B0F]" id="pricing">
       <div className="max-w-7xl mx-auto">
@@ -81,7 +82,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onStart }) => {
           <Badge className="mb-4 px-4 py-1 bg-primary/10 text-primary border-primary/20 hover:bg-primary/20 transition-colors">
             Pricing Plans
           </Badge>
-          <h2 className="text-4xl md:text-5xl font-heading mb-4 text-white font-black italic">Simple, Transparent Pricing</h2>
+          <h2 className="text-4xl md:text-5xl font-heading mb-4 text-white font-black">Simple, Transparent Pricing</h2>
           <p className="text-slate-400 text-lg max-w-2xl mx-auto font-medium">
             Choose the plan that fits your business stage. All plans include a 14-day free trial.
           </p>
@@ -135,10 +136,10 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onStart }) => {
                 
                 <CardFooter>
                   <Button 
-                    onClick={onStart}
+                    onClick={() => onStart?.(tier.name)}
                     className={cn(
                       "w-full rounded-2xl py-6 text-lg font-bold transition-all duration-300", 
-                      tier.popular ? "bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 text-white" : "bg-white/5 border-white/10 text-white hover:bg-white/10"
+                      tier.popular ? "bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 text-white" : "bg-white/5 border-primary/50 text-white hover:bg-primary/10 hover:border-primary border-2"
                     )}
                     variant={tier.popular ? "default" : "outline"}
                   >
